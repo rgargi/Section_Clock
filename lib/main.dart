@@ -7,13 +7,19 @@ import 'section_clock.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.landscapeLeft,
-    DeviceOrientation.landscapeRight,
-  ]);
+  SystemChrome.setPreferredOrientations(
+    [
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ],
+  );
 
   // The [ClockCustomizer] takes in a [ClockBuilder] that consists of:
   //  - A clock widget (in this case, [SectionClock])
   //  - A model (provided by [ClockModel])
-  runApp(ClockCustomizer((ClockModel model) => SectionClock(model)));
+  runApp(
+    ClockCustomizer(
+      (ClockModel model) => SectionClock(model),
+    ),
+  );
 }

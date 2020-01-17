@@ -78,30 +78,45 @@ class _SectionClockState extends State<SectionClock> {
     final minute = DateFormat('mm').format(_dateTime);
 
     final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
 
     final clockTextStyle = TextStyle(
       fontFamily: 'Signika',
-      fontSize: screenWidth / 3.5,
+      // fontSize: screenWidth / 3.5,
+      fontSize: screenHeight * 0.55,
+      shadows: [
+        Shadow(
+          blurRadius: 0,
+          color: Colors.grey[300],
+          offset: Offset(4, 0),
+        ),
+      ],
     );
-    final detailsTextStyle = const TextStyle(
+    final detailsTextStyle = TextStyle(
       fontFamily: 'Signika',
-      fontSize: 16,
+      fontSize: screenHeight * 0.05,
     );
     final secondChildTextStyle = TextStyle(
       fontFamily: 'Signika',
-      fontSize: 30,
+      fontSize: screenHeight * 0.11,
       color: barColor(_condition),
+    );
+    final secondChildTextStyleColorVariant = TextStyle(
+      fontFamily: 'Signika',
+      fontSize: screenHeight * 0.11,
+      color: Colors.grey,
     );
 
     return Padding(
-      padding: const EdgeInsets.all(2.0),
+      padding: const EdgeInsets.all(4.0),
       child: Container(
         decoration: BoxDecoration(
-            border: Border.all(
-              color: barColor(_condition),
-              width: 1,
-            ),
-            borderRadius: BorderRadius.circular(20)),
+          border: Border.all(
+            color: barColor(_condition),
+            width: 1,
+          ),
+          borderRadius: BorderRadius.circular(20),
+        ),
         child: AnimatedCrossFade(
           crossFadeState: minute == '00'
               ? CrossFadeState.showFirst
@@ -110,12 +125,32 @@ class _SectionClockState extends State<SectionClock> {
           firstCurve: Curves.easeOutQuint,
           secondCurve: Curves.easeInQuint,
           firstChild: Center(
-              child: Padding(
-            padding: const EdgeInsets.all(30.0),
-            child: Text(
-                'It\s $hourwithAmPm on a $weekday at $_location and the $_randomString!',
-                style: secondChildTextStyle),
-          )),
+            child: Container(
+              margin: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(30.0),
+              child: RichText(
+                text:
+                    TextSpan(style: secondChildTextStyle, children: <TextSpan>[
+                  TextSpan(text: 'It\'s '),
+                  TextSpan(
+                    text: hourwithAmPm,
+                    style: secondChildTextStyleColorVariant,
+                  ),
+                  TextSpan(text: ' on a '),
+                  TextSpan(
+                    text: weekday,
+                    style: secondChildTextStyleColorVariant,
+                  ),
+                  TextSpan(text: ' at '),
+                  TextSpan(
+                    text: _location,
+                    style: secondChildTextStyleColorVariant,
+                  ),
+                  TextSpan(text: ' and the $_randomString!'),
+                ]),
+              ),
+            ),
+          ),
           secondChild: Column(
             children: <Widget>[
               Row(
@@ -127,6 +162,7 @@ class _SectionClockState extends State<SectionClock> {
                   Text(minute, style: clockTextStyle),
                 ],
               ),
+              const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[

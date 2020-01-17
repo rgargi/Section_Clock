@@ -56,5 +56,6 @@ class RandomStrings {
     'has won the lottery',
     'is taking a break',
     'is trying to paint',
+    'is casting a spell',
   ];
 }
