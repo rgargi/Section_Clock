@@ -7,6 +7,10 @@ import 'package:intl/intl.dart' show DateFormat;
 import './weather_conditions.dart';
 import './random_strings.dart';
 
+final _lightColors = const [Color(0x00ECE9E6), Color(0x00FFFFFF)];
+final _darkColors = const [Colors.black45, Colors.black38];
+// final _darkColors = const [Color(0x00303030), Color(0x00323232)];
+
 class SectionClock extends StatefulWidget {
   final ClockModel model;
   const SectionClock(this.model);
@@ -63,7 +67,6 @@ class _SectionClockState extends State<SectionClock> {
       _timer = Timer(
           Duration(seconds: 1) - Duration(milliseconds: _dateTime.millisecond),
           _updateTime);
-      // This calculates the fraction of the hour passed
       _hourSpent = (_dateTime.minute + _dateTime.second / 60) / 60;
     });
   }
@@ -80,9 +83,12 @@ class _SectionClockState extends State<SectionClock> {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
+    final colors = Theme.of(context).brightness == Brightness.light
+        ? _lightColors
+        : _darkColors;
+
     final clockTextStyle = TextStyle(
       fontFamily: 'Signika',
-      // fontSize: screenWidth / 3.5,
       fontSize: screenHeight * 0.55,
       shadows: [
         Shadow(
@@ -101,9 +107,10 @@ class _SectionClockState extends State<SectionClock> {
       fontSize: screenHeight * 0.11,
       color: barColor(_condition),
     );
-    final secondChildTextStyleColorVariant = TextStyle(
+    final secondChildTextStyleVariant = TextStyle(
       fontFamily: 'Signika',
       fontSize: screenHeight * 0.11,
+      fontWeight: FontWeight.bold,
       color: Colors.grey,
     );
 
@@ -111,9 +118,13 @@ class _SectionClockState extends State<SectionClock> {
       padding: const EdgeInsets.all(4.0),
       child: Container(
         decoration: BoxDecoration(
+          gradient: LinearGradient(
+              colors: colors,
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight),
           border: Border.all(
             color: barColor(_condition),
-            width: 1,
+            width: 2,
           ),
           borderRadius: BorderRadius.circular(20),
         ),
@@ -131,22 +142,21 @@ class _SectionClockState extends State<SectionClock> {
               child: RichText(
                 text:
                     TextSpan(style: secondChildTextStyle, children: <TextSpan>[
-                  TextSpan(text: 'It\'s '),
+                  const TextSpan(text: 'It\'s '),
                   TextSpan(
                     text: hourwithAmPm,
-                    style: secondChildTextStyleColorVariant,
+                    style: secondChildTextStyleVariant,
                   ),
-                  TextSpan(text: ' on a '),
+                  const TextSpan(text: ' on a '),
                   TextSpan(
                     text: weekday,
-                    style: secondChildTextStyleColorVariant,
+                    style: secondChildTextStyleVariant,
                   ),
-                  TextSpan(text: ' at '),
+                  const TextSpan(text: ' at '),
                   TextSpan(
                     text: _location,
-                    style: secondChildTextStyleColorVariant,
                   ),
-                  TextSpan(text: ' and the $_randomString!'),
+                  TextSpan(text: ' and $_randomString!'),
                 ]),
               ),
             ),
@@ -155,7 +165,6 @@ class _SectionClockState extends State<SectionClock> {
             children: <Widget>[
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                // crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Text(hour, style: clockTextStyle),
                   Text(':', style: clockTextStyle),
@@ -181,7 +190,7 @@ class _SectionClockState extends State<SectionClock> {
               Stack(
                 children: <Widget>[
                   Container(
-                    height: 15,
+                    height: screenHeight * 0.03,
                     width: screenWidth * 0.75,
                     decoration: BoxDecoration(
                       color: Colors.grey[300],
@@ -189,9 +198,9 @@ class _SectionClockState extends State<SectionClock> {
                     ),
                   ),
                   AnimatedContainer(
-                    duration: const Duration(seconds: 2),
+                    duration: const Duration(seconds: 1),
                     curve: Curves.linear,
-                    height: 15,
+                    height: screenHeight * 0.03,
                     width: _hourSpent * screenWidth * 0.75,
                     decoration: BoxDecoration(
                       color: barColor(_condition),

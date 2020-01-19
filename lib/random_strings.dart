@@ -57,5 +57,11 @@ class RandomStrings {
     'is taking a break',
     'is trying to paint',
     'is casting a spell',
+    'is flying a kite',
+    'is flying on a broomstick',
+    'is flying a plane',
+    'is jumping in puddles',
+    'is singing in the shower',
+    'is very hungry',
   ];
 }
