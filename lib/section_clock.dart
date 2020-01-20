@@ -11,8 +11,6 @@ import './random_strings.dart';
 final _lightColors = const [Color(0x00ECE9E6), Color(0x00FFFFFF)];
 final _darkColors = const [Colors.black45, Colors.black38];
 
-// final _darkColors = const [Color(0x00303030), Color(0x00323232)];
-
 class SectionClock extends StatefulWidget {
   final ClockModel model;
   const SectionClock(this.model);
@@ -77,7 +75,6 @@ class _SectionClockState extends State<SectionClock> {
   @override
   Widget build(BuildContext context) {
     final blobTravelRange = ([300.0, 500.0, 600.0, 1000.0, 1200.0]..shuffle());
-    print(blobTravelRange.first);
     final hour =
         DateFormat(widget.model.is24HourFormat ? 'HH' : 'hh').format(_dateTime);
     final hourwithAmPm = DateFormat('h a').format(_dateTime);
@@ -99,7 +96,7 @@ class _SectionClockState extends State<SectionClock> {
         Shadow(
           blurRadius: 0,
           color: Colors.grey[300],
-          offset: Offset(4, 0),
+          offset: const Offset(4, 0),
         ),
       ],
     );
@@ -122,8 +119,8 @@ class _SectionClockState extends State<SectionClock> {
     return Stack(
       children: <Widget>[
         AnimatedPositioned(
-          curve: Curves.easeInOut,
-          duration: Duration(seconds: 10),
+          curve: Curves.easeOut,
+          duration: const Duration(seconds: 10),
           top: _moveBlob ? screenHeight * 0.51 : screenHeight * 0.515,
           width: _moveBlob ? blobTravelRange.first : blobTravelRange.first,
           height: minute == '00' ? screenHeight * 0.8 : screenHeight * 0.5,
