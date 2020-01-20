@@ -6,7 +6,11 @@ class RandomStrings {
       'EyesBlinkSlow',
       'EyesBlinkFast',
       'EyesUpDown',
-      'Body'
+      'Body',
+      'BodyEyesMove',
+      'BodyEyesMoveBlink',
+      'BodyEyesBlinkSlow',
+      'BodyEyesMoveBlinkFast',
     ];
     return _animationList[Random().nextInt(_animationList.length)];
   }

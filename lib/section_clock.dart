@@ -24,7 +24,6 @@ class _SectionClockState extends State<SectionClock> {
   var _temperature = '';
   var _condition = '';
   var _location = '';
-  var _randomString = '';
   Timer _timer;
   double _hourSpent;
   var _moveBlob = false;
@@ -58,7 +57,6 @@ class _SectionClockState extends State<SectionClock> {
       _temperature = widget.model.temperatureString;
       _condition = widget.model.weatherString;
       _location = widget.model.location;
-      _randomString = RandomStrings().getRandomString();
     });
   }
 
@@ -77,11 +75,9 @@ class _SectionClockState extends State<SectionClock> {
     final blobTravelRange = ([300.0, 500.0, 600.0, 1000.0, 1200.0]..shuffle());
     final hour =
         DateFormat(widget.model.is24HourFormat ? 'HH' : 'hh').format(_dateTime);
-    final hourwithAmPm = DateFormat('h a').format(_dateTime);
     final fullDate = DateFormat('yMMMMd').format(_dateTime);
     final weekday = DateFormat('EEEE').format(_dateTime);
     final minute = DateFormat('mm').format(_dateTime);
-
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
@@ -104,20 +100,11 @@ class _SectionClockState extends State<SectionClock> {
       fontFamily: 'Signika',
       fontSize: screenHeight * 0.05,
     );
-    final secondChildTextStyle = TextStyle(
-      fontFamily: 'Signika',
-      fontSize: screenHeight * 0.11,
-      color: barColor(_condition),
-    );
-    final secondChildTextStyleVariant = TextStyle(
-      fontFamily: 'Signika',
-      fontSize: screenHeight * 0.11,
-      fontWeight: FontWeight.bold,
-      color: Colors.grey,
-    );
 
     return Stack(
       children: <Widget>[
+        // This animates the flare actor. Width is selected randomly from a list
+        // Height animates only when the hour changes
         AnimatedPositioned(
           curve: Curves.easeOut,
           duration: const Duration(seconds: 10),
@@ -146,6 +133,7 @@ class _SectionClockState extends State<SectionClock> {
             ),
             borderRadius: BorderRadius.circular(20),
           ),
+          // This changes between the main clock face and the hourly message
           child: AnimatedCrossFade(
             crossFadeState: minute == '00'
                 ? CrossFadeState.showFirst
@@ -153,33 +141,10 @@ class _SectionClockState extends State<SectionClock> {
             duration: const Duration(milliseconds: 1000),
             firstCurve: Curves.easeOutQuint,
             secondCurve: Curves.easeInQuint,
-            firstChild: Center(
-              child: Container(
-                margin: const EdgeInsets.all(10.0),
-                padding: const EdgeInsets.all(30.0),
-                child: RichText(
-                  text: TextSpan(
-                      style: secondChildTextStyle,
-                      children: <TextSpan>[
-                        const TextSpan(text: 'It\'s '),
-                        TextSpan(
-                          text: hourwithAmPm,
-                          style: secondChildTextStyleVariant,
-                        ),
-                        const TextSpan(text: ' on a '),
-                        TextSpan(
-                          text: weekday,
-                          style: secondChildTextStyleVariant,
-                        ),
-                        const TextSpan(text: ' at '),
-                        TextSpan(
-                          text: _location,
-                        ),
-                        TextSpan(text: ' and $_randomString!'),
-                      ]),
-                ),
-              ),
-            ),
+            firstChild: hourlyMessage(
+                condition: _condition,
+                location: _location,
+                screenHeight: screenHeight),
             secondChild: Column(
               children: <Widget>[
                 Row(
@@ -190,7 +155,8 @@ class _SectionClockState extends State<SectionClock> {
                     Text(minute, style: clockTextStyle),
                   ],
                 ),
-                const SizedBox(height: 50),
+                SizedBox(height: screenHeight * 0.1),
+                // This stack contains the hourly progess bar
                 Stack(
                   children: <Widget>[
                     Container(
@@ -214,6 +180,7 @@ class _SectionClockState extends State<SectionClock> {
                   ],
                 ),
                 const SizedBox(height: 10),
+                // This row displays the current date and weather conditions
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -235,4 +202,51 @@ class _SectionClockState extends State<SectionClock> {
       ],
     );
   }
+}
+
+// Every hour this displays a random text string with the hour, day, and location.
+Widget hourlyMessage(
+    {@required double screenHeight,
+    @required String condition,
+    @required String location}) {
+  final _dateTime = DateTime.now();
+  final weekday = DateFormat('EEEE').format(_dateTime);
+  final hourwithAmPm = DateFormat('h a').format(_dateTime);
+  final _randomString = RandomStrings().getRandomString();
+  final hourlyMessageTextStyle = TextStyle(
+    fontFamily: 'Signika',
+    fontSize: screenHeight * 0.11,
+    color: barColor(condition),
+  );
+  final hourlyMessageTextStyleVariant = TextStyle(
+    fontFamily: 'Signika',
+    fontSize: screenHeight * 0.11,
+    fontWeight: FontWeight.bold,
+    color: Colors.grey,
+  );
+  return Center(
+    child: Container(
+      margin: const EdgeInsets.all(10.0),
+      padding: const EdgeInsets.all(30.0),
+      child: RichText(
+        text: TextSpan(style: hourlyMessageTextStyle, children: <TextSpan>[
+          const TextSpan(text: 'It\'s '),
+          TextSpan(
+            text: hourwithAmPm,
+            style: hourlyMessageTextStyleVariant,
+          ),
+          const TextSpan(text: ' on a '),
+          TextSpan(
+            text: weekday,
+            style: hourlyMessageTextStyleVariant,
+          ),
+          const TextSpan(text: ' at '),
+          TextSpan(
+            text: location,
+          ),
+          TextSpan(text: ' and $_randomString!'),
+        ]),
+      ),
+    ),
+  );
 }

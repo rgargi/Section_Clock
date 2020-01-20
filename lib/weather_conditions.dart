@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-String weatherImage(condition) {
+String weatherImage(String condition) {
   if (condition == 'sunny') {
     return '☀️';
   }
@@ -26,7 +26,7 @@ String weatherImage(condition) {
   }
 }
 
-Color barColor(condition) {
+Color barColor(String condition) {
   if (condition == 'sunny') {
     return Colors.orange[300];
   }
