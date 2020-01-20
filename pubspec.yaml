@@ -11,6 +11,7 @@ dependencies:
   flutter_clock_helper:
     path: ../flutter_clock_helper
   cupertino_icons: ^0.1.2
+  flare_flutter: ^2.0.1
 
 dev_dependencies:
   flutter_test:
@@ -19,8 +20,8 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - assets/images/clipart.jpg
+  assets:
+    - assets/animations/green_leaf_blob.flr
   fonts:
     - family: Signika
       fonts:

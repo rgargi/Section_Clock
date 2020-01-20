@@ -1,6 +1,16 @@
 import 'dart:math';
 
 class RandomStrings {
+  String getRandomAnimation() {
+    final _animationList = const [
+      'EyesBlinkSlow',
+      'EyesBlinkFast',
+      'EyesUpDown',
+      'Body'
+    ];
+    return _animationList[Random().nextInt(_animationList.length)];
+  }
+
   String getRandomString() {
     final _random = Random();
     final _output = _names[_random.nextInt(_names.length)] +

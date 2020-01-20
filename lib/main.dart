@@ -1,3 +1,4 @@
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_clock_helper/customizer.dart';
 import 'package:flutter_clock_helper/model.dart';
@@ -13,6 +14,7 @@ void main() {
       DeviceOrientation.landscapeRight,
     ],
   );
+  // debugPaintSizeEnabled = true;
 
   // The [ClockCustomizer] takes in a [ClockBuilder] that consists of:
   //  - A clock widget (in this case, [SectionClock])
